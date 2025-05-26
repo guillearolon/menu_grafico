@@ -11,27 +11,35 @@ while True:
     print("5. Salir")
     print("--------------------------------------")
 
-    opcion = input("Indice del 1 al 5 la acción que desea realizar: ").strip()
+    opcion = input("Indique del 1 al 5 la acción que desea realizar: ").strip()
 
     if opcion == "1":
         while True:
             nombre = input("\nIngrese el nombre de un producto: ").strip().lower()
+            if not nombre:
+                print("¡ERROR! El nombre no puede estar vacío.")
+                continue
+
             categoria = input("Ingrese la categoría a la que corresponde: ").strip().lower()
-            
+            if not categoria:
+                print("¡ERROR! La categoría no puede estar vacía.")
+                continue
+
             while True:
-                precio = input("Ingrese el precio del producto: ")
+                precio = input("Ingrese el precio del producto: ").strip()
                 if precio.isdigit():
                     precio = int(precio)
                     if precio < 0:
-                        print("¡ERROR!, el valor del producto no puede ser negativo")
+                        print("¡ERROR! El precio no puede ser negativo.")
                     else:
                         break
                 else:
-                    print("¡ERROR!, ingrese un número entero")
-            
-            lista_productos.append([nombre, categoria, precio])
+                    print("¡ERROR! Ingrese un número entero válido.")
 
-            continuar = input("\n¿Quiere seguir agregando productos a la lista? s/n: ").strip().lower()
+            lista_productos.append([nombre, categoria, precio])
+            print("Producto agregado correctamente.")
+
+            continuar = input("\n¿Desea agregar otro producto? (s/n): ").strip().lower()
             if continuar != "s":
                 break
 
@@ -47,10 +55,36 @@ while True:
                 print(f" - Precio: ${producto[2]}")
 
     elif opcion == "3":
-        break
+        busqueda = input("\nIngrese el nombre del producto a buscar: ").strip().lower()
+        if not busqueda:
+            print("¡ERROR! No se ingresó un nombre para buscar.")
+        else:
+            encontrados = []
+            for producto in lista_productos:
+                if busqueda in producto[0]:
+                    encontrados.append(producto)
+
+            if encontrados:
+                print(f"\nProductos encontrados con '{busqueda}':")
+                for prod in encontrados:
+                    print(f" - Nombre: {prod[0]}, Categoría: {prod[1]}, Precio: ${prod[2]}")
+            else:
+                print(f"No se encontraron productos con el nombre '{busqueda}'.")
 
     elif opcion == "4":
-        break
+        if not lista_productos:
+            print("\nNo hay productos para eliminar.")
+        else:
+            eliminar = input("\nIngrese el nombre exacto del producto a eliminar: ").strip().lower()
+            encontrado = False
+            for i, producto in enumerate(lista_productos):
+                if producto[0] == eliminar:
+                    del lista_productos[i]
+                    encontrado = True
+                    print(f"Producto '{eliminar}' eliminado correctamente.")
+                    break
+            if not encontrado:
+                print(f"No se encontró el producto '{eliminar}' en la lista.")
 
     elif opcion == "5":
         print("Usted ha salido del programa. ¡Hasta luego!")
